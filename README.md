@@ -1,7 +1,7 @@
 # XRcon1.0.0
 Rcon bot for discord to ASA or ASE, listens to the discord channel on the config.json.
 
-once a command its sent it creates 1 button per sserver from the Config.json.
+once a command its sent it creates 1 button per server from the Config.json.
 Each server name will be displayed with an emoji or any utf-8 character. https://www.textfacescopy.com/confused-text-faces.html
 You can change the buttons colors using any of this formats: 
 Name	  	Color
