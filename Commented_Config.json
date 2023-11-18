@@ -1,0 +1,28 @@
+{
+  "discord_bot_token": "discord_bot_token",
+  "channel_id": "channel_id", // Discord Channel to listen for commands
+  "servers": {
+    "(ノ˵ ͡• ͜ʖ ͡•˵)ﾉ♡*": { // Can Be emoji Utf-8 format or https://www.textfacescopy.com/confused-text-faces.html
+      "name": "server_name",
+      "ip": "rcon_ip",
+      "port": "rcon_port",
+      "password": "rcon_password",
+      "style": "primary"
+    },
+    "🔵": { // Can Be emoji Utf-8 format
+      "name": "server_name",
+      "ip": "rcon_ip",
+      "port": "rcon_port",
+      "password": "rcon_password",
+      "style": "secondary"
+    },
+    "( •̀ ω •́ )✧": { // Can Be emoji Utf-8 format
+      "name": "server_name",
+      "ip": "rcon_ip",
+      "port": "rcon_port",
+      "password": "rcon_password",
+      "style": "Danger"
+    }
+    // Add more servers as needed
+  }
+}

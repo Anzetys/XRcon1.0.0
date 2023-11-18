@@ -1,0 +1,27 @@
+{
+  "discord_bot_token": "discord_bot_token",
+  "channel_id": "channel_id",
+  "servers": {
+    "(ノ˵ ͡• ͜ʖ ͡•˵)ﾉ♡*": {
+      "name": "server_name",
+      "ip": "rcon_ip",
+      "port": "rcon_port",
+      "password": "rcon_password",
+      "style": "primary"
+    },
+    "🔵": {
+      "name": "server_name",
+      "ip": "rcon_ip",
+      "port": "rcon_port",
+      "password": "rcon_password",
+      "style": "secondary"
+    },
+    "( •̀ ω •́ )✧": {
+      "name": "server_name",
+      "ip": "rcon_ip",
+      "port": "rcon_port",
+      "password": "rcon_password",
+      "style": "Danger"
+    }
+  }
+}
