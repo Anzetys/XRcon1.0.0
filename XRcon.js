@@ -22,41 +22,46 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', async message => {
-    // Prevent the bot from responding to itself or other bots
-    if (message.author.bot) return;
+    if (message.author.bot || message.channelId !== config.channel_id.toString()) return;
 
-    if (message.channelId === config.channel_id.toString()) {
-        const view = new ActionRowBuilder();
+    const views = [];
+    let currentRow = new ActionRowBuilder();
+    let buttonCount = 0;
 
-        for (const [emoji, server] of Object.entries(config.servers)) {
-            const buttonStyle = getButtonStyle(server.style || 'secondary');
-            const button = new ButtonBuilder()
-                .setCustomId(`server-button-${emoji}`)
-                .setLabel(`${emoji} - ${server.name}`)
-                .setStyle(buttonStyle);
+    Object.entries(config.servers).forEach(([emoji, server], index) => {
+        const button = new ButtonBuilder()
+            .setCustomId(`server-button-${emoji}`)
+            .setLabel(`${emoji} - ${server.name}`)
+            .setStyle(getButtonStyle(server.style || 'secondary'));
 
-            view.addComponents(button);
+        currentRow.addComponents(button);
+        buttonCount++;
+
+        if (buttonCount === 5 || index === Object.entries(config.servers).length - 1) {
+            views.push(currentRow);
+            currentRow = new ActionRowBuilder();
+            buttonCount = 0;
         }
+    });
 
-        const embed = new EmbedBuilder()
-            .setTitle("Select Server for Command Execution")
-            .setDescription(`\`\`\`\n${message.content}\n\`\`\``)
-            .setColor(0x00ff00);
+    const embed = new EmbedBuilder()
+        .setTitle("Select Server for Command Execution")
+        .setDescription(`\`\`\`\n${message.content}\n\`\`\``)
+        .setColor(0x00ff00);
 
-        const msg = await message.channel.send({ embeds: [embed], components: [view] });
-        customCachedMessages[msg.id] = { command: message.content, serverInfo: null };
-    }
+    const msg = await message.channel.send({ embeds: [embed], components: views });
+    customCachedMessages[msg.id] = { command: message.content };
 });
 
 client.on('interactionCreate', async interaction => {
     if (!interaction.isButton()) return;
 
-    // Acknowledge the interaction and indicate that the bot is processing the command
     await interaction.deferReply({ ephemeral: true });
 
     const cachedData = customCachedMessages[interaction.message.id];
     if (!cachedData) {
         console.error('No cached data found for this interaction.');
+        await interaction.editReply({ content: "Error: No cached data found for this interaction." });
         return;
     }
 
@@ -65,6 +70,7 @@ client.on('interactionCreate', async interaction => {
 
     if (!serverInfo || !serverInfo.ip) {
         console.error('Server information is incomplete or missing:', serverInfo);
+        await interaction.editReply({ content: "Error: Server information is incomplete or missing." });
         return;
     }
 
@@ -80,26 +86,15 @@ client.on('interactionCreate', async interaction => {
         rconClient.disconnect();
 
         const originalEmbed = interaction.message.embeds[0];
-        const updatedEmbed = new EmbedBuilder()
+        const updatedEmbed = new EmbedBuilder(originalEmbed)
             .setTitle(`Selected server (${serverInfo.name})`)
             .setDescription(response ?
                 `Response:\n\`\`\`\n${response}\n\`\`\`` :
                 `No response received or command does not provide a response.`)
             .setColor(originalEmbed.color);
 
-        const view = new ActionRowBuilder();
-        for (const [emoji, server] of Object.entries(config.servers)) {
-            const button = new ButtonBuilder()
-                .setCustomId(`disabled-${emoji}`)
-                .setLabel(`${emoji} - ${server.name}`)
-                .setStyle(ButtonStyle.Secondary)
-                .setDisabled(true);
-
-            view.addComponents(button);
-        }
-
         // Edit the original message
-        await interaction.message.edit({ embeds: [updatedEmbed], components: [view] });
+        await interaction.message.edit({ embeds: [updatedEmbed], components: [] });
         await interaction.deleteReply();
 
         delete customCachedMessages[interaction.message.id];
@@ -109,7 +104,6 @@ client.on('interactionCreate', async interaction => {
     }
 });
 
-// Function to convert string to ButtonStyle
 function getButtonStyle(styleName) {
     const styles = {
         'primary': ButtonStyle.Primary,
@@ -118,7 +112,7 @@ function getButtonStyle(styleName) {
         'danger': ButtonStyle.Danger,
         'link': ButtonStyle.Link
     };
-    return styles[styleName] || ButtonStyle.Secondary; // Default to secondary if not found
+    return styles[styleName] || ButtonStyle.Secondary;
 }
 
 client.login(config.discord_bot_token);
