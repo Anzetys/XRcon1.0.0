@@ -30,7 +30,6 @@ Danger		red
 
 
 
-<img width="477" alt="b29666c53c420be8dfa26f6781fdecfb" src="https://github.com/Anzetys/XRcon1.0.0/assets/150568341/f6eea0cc-856d-46d6-9eaa-5cb88e0ccc19">
 
 
 
