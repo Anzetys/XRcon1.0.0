@@ -1,6 +1,7 @@
 {
   "discord_bot_token": "discord_bot_token",
   "channel_id": "channel_id",
+  "interactionType": "select",
   "servers": {
     "(ノ˵ ͡• ͜ʖ ͡•˵)ﾉ♡*": {
       "name": "server_name",
