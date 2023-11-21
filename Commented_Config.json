@@ -1,6 +1,7 @@
 {
   "discord_bot_token": "discord_bot_token",
   "channel_id": "channel_id", // Discord Channel to listen for commands
+  "interactionType": "select", // select for menu. buttons for server buttons
   "servers": {
     "(ノ˵ ͡• ͜ʖ ͡•˵)ﾉ♡*": { // Can Be emoji Utf-8 format or https://www.textfacescopy.com/confused-text-faces.html
       "name": "server_name",
